@@ -16,11 +16,9 @@ df_data = pd.read_csv("update/Part 1 - Data Preprocessing/Section 2 ------------
 X = df_data.iloc[:, :-1].values
 y = df_data.iloc[:, -1].values
 
-# dataset de entrenamiento y testing
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2, random_state=0)
-
-# # Escalado de datos - No se hará siempre, por eso está comentado
-# sc_X = StandardScaler()
-# X_train = sc_X.fit_transform(X_train)
-# X_test = sc_X.transform(X_test)
+# REEMPLAZO NaN
+# New in version 0.20: SimpleImputer replaces the previous sklearn.preprocessing.Imputer estimator which is now removed.
+imputer = SimpleImputer(missing_values=np.NAN, strategy="mean")
+imputer.fit(X[:, 1:3])
+X[:, 1:3] = imputer.transform(X[:, 1:3])
 

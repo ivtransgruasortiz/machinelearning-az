@@ -16,11 +16,17 @@ df_data = pd.read_csv("update/Part 1 - Data Preprocessing/Section 2 ------------
 X = df_data.iloc[:, :-1].values
 y = df_data.iloc[:, -1].values
 
-# dataset de entrenamiento y testing
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2, random_state=0)
+# Codificar variables categoricas
 
-# # Escalado de datos - No se hará siempre, por eso está comentado
-# sc_X = StandardScaler()
-# X_train = sc_X.fit_transform(X_train)
-# X_test = sc_X.transform(X_test)
+# Variables categoricas ORDINALES (importa el orden como por ejemplo las tallas de ropa)
+le_X = LabelEncoder()
+X[:, 0] = le_X.fit_transform(X[:, 0])
+
+# Variables categoricas DUMMY (no importa el orden)
+ct = ColumnTransformer([('one_hot_encoder', OneHotEncoder(categories='auto'), [0])],
+                       remainder='passthrough')
+X = np.array(ct.fit_transform(X), dtype=float)
+# Para la variable dependiente y (solo toma 2 valores, lo podemos hacer con un label)
+le_y = LabelEncoder()
+y = le_y.fit_transform(y)
 
